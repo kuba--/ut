@@ -6,21 +6,21 @@ Here yet another efficient unification algorithm centered on a specific data str
 
 ```Go
 	x, y := "p(Z,h(Z,W),f(W))", "p(f(X),h(Y,f(a)),Y)"
-	
-  // New Unification Table
-  ut := New(Tokenize(x, y))
+
+	// New Unification Table
+	ut := New(Tokenize(x, y))
 	ix, iy := ut.Lookup[x], ut.Lookup[y]
-  
-  if ut.Unify(ix, iy) {
-    fmt.Println("W = ", ut.MGU("W"))
-    fmt.Println("X = ", ut.MGU("X"))
-    fmt.Println("Y = ", ut.MGU("Y"))
-    fmt.Println("Z = ", ut.MGU("Z"))
-  }
-  
-  
-// W = f(a)
-// X = f(a)
-// Y = f(f(a))
-// Z = f(f(a))
+
+	if ut.Unify(ix, iy) {
+		fmt.Println("W = " + ut.MGU("W"))
+		fmt.Println("X = " + ut.MGU("X"))
+		fmt.Println("Y = " + ut.MGU("Y"))
+		fmt.Println("Z = " + ut.MGU("Z"))
+	}
+
+	// Output:
+	// W = f(a)
+	// X = f(a)
+	// Y = f(f(a))
+	// Z = f(f(a))
 ```
