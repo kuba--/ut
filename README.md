@@ -20,7 +20,7 @@ func Unify(x, y string) map[string]string {
 
 	mgu := make(map[string]string)
 	for i, j := range ut.Bindings {
-		j = ut.dereference(j)
+		j = ut.Dereference(j)
 		mgu[ut.Entries[i].Term] = ut.TermString(j)
 	}
 

@@ -53,7 +53,7 @@ func TestUnify(t *testing.T) {
 	}
 
 	for v1, v2 := range ut.Bindings {
-		v2 = ut.dereference(v2)
+		v2 = ut.Dereference(v2)
 		t.Logf("%s = %s\n", ut.Entries[v1].Term, ut.TermString(v2))
 	}
 

@@ -67,7 +67,7 @@ func Unify(x, y string) map[string]string {
 
 	mgu := make(map[string]string)
 	for i, j := range ut.Bindings {
-		j = ut.dereference(j)
+		j = ut.Dereference(j)
 		mgu[ut.Entries[i].Term] = ut.TermString(j)
 	}
 
@@ -184,7 +184,7 @@ func (ut *UT) MGU(term string) string {
 		return ""
 	}
 
-	i = ut.dereference(ut.Bindings[i])
+	i = ut.Dereference(ut.Bindings[i])
 	return ut.TermString(i)
 }
 
@@ -199,7 +199,7 @@ func (ut *UT) TermString(idx int) string {
 
 		components := []string{}
 		for _, c := range e.Components {
-			i := ut.dereference(c)
+			i := ut.Dereference(c)
 			if i != idx && ut.Entries[i].Type == Functor {
 				components = append(components, ut.TermString(i))
 			} else {
@@ -210,6 +210,18 @@ func (ut *UT) TermString(idx int) string {
 		return ut.Entries[idx].Functor + "(" + strings.Join(components, ",") + ")"
 	}
 	return ""
+}
+
+// Dereference follows bindings and returns index for dereferenced variable.
+func (ut *UT) Dereference(idx int) int {
+	i, ok := idx, true
+	for ok {
+		i, ok = ut.Bindings[i]
+		if ok {
+			idx = i
+		}
+	}
+	return idx
 }
 
 // bindSTR tries to bind a VAR(varIdx) to STR(strIdx).
@@ -225,7 +237,7 @@ func (ut *UT) bindSTR(strIdx, varIdx int) (int, int, bool) {
 	}
 
 	// var is already bound - dereference
-	idx = ut.dereference(idx)
+	idx = ut.Dereference(idx)
 
 	// var is bound to a STR
 	e := ut.Entries[idx]
@@ -265,16 +277,4 @@ func (ut *UT) bindVAR(varIdx1, varIdx2 int) (int, int, bool) {
 
 	// var1 is bound and var2 is bound
 	return i1, i2, false
-}
-
-// dereference follows bindings and returns index for dereferenced variable.
-func (ut *UT) dereference(idx int) int {
-	i, ok := idx, true
-	for ok {
-		i, ok = ut.Bindings[i]
-		if ok {
-			idx = i
-		}
-	}
-	return idx
 }
