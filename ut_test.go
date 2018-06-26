@@ -78,23 +78,20 @@ func TestUnify(t *testing.T) {
 	}
 }
 
-func ExampleMGU() {
-	x, y := "p(Z,h(Z,W),f(W))", "p(f(X),h(Y,f(a)),Y)"
+func ExampleUnify() {
+	x, y := "f(X1,g(X2,X3),X2,b)", "f(g(h(a,X5),X2),X1,h(a,X4),X4)"
+	mgu := Unify(x, y)
 
-	// New Unification Table
-	ut := New(Tokenize(x, y))
-	ix, iy := ut.Lookup[x], ut.Lookup[y]
-
-	if ut.Unify(ix, iy) {
-		fmt.Println("W = " + ut.MGU("W"))
-		fmt.Println("X = " + ut.MGU("X"))
-		fmt.Println("Y = " + ut.MGU("Y"))
-		fmt.Println("Z = " + ut.MGU("Z"))
-	}
+	fmt.Println("X1 = " + mgu["X1"])
+	fmt.Println("X2 = " + mgu["X2"])
+	fmt.Println("X3 = " + mgu["X3"])
+	fmt.Println("X4 = " + mgu["X4"])
+	fmt.Println("X5 = " + mgu["X5"])
 
 	// Output:
-	// W = f(a)
-	// X = f(a)
-	// Y = f(f(a))
-	// Z = f(f(a))
+	// X1 = g(h(a,b),h(a,b))
+	// X2 = h(a,b)
+	// X3 = h(a,b)
+	// X4 = b
+	// X5 = b
 }

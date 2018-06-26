@@ -54,6 +54,26 @@ func (e *Entry) String() string {
 	return fmt.Sprintf("{Type: %s, Functor: %s, Components: %v}", TokenString(e.Type), e.Functor, e.Components)
 }
 
+// Unify returns a unification maps with VAR bindings.
+// Also see ut.MGU for particular terms.
+func Unify(x, y string) map[string]string {
+	tokens := Tokenize(x, y)
+	ut := New(tokens)
+	ix, iy := ut.Lookup[x], ut.Lookup[y]
+
+	if !ut.Unify(ix, iy) {
+		return nil
+	}
+
+	mgu := make(map[string]string)
+	for i, j := range ut.Bindings {
+		j = ut.dereference(j)
+		mgu[ut.Entries[i].Term] = ut.TermString(j)
+	}
+
+	return mgu
+}
+
 // New creates a new Unification Table.
 func New(tokens []*Token) (ut *UT) {
 	ut = &UT{Lookup: make(map[string]int), Bindings: make(map[int]int)}
