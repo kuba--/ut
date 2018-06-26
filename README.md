@@ -42,7 +42,6 @@ fmt.Println("Z = " + mgu("Z"))
 
 x, y = "f(X1,g(X2,X3),X2,b)", "f(g(h(a,X5),X2),X1,h(a,X4),X4)"
 mgu = Unify(x, y)
-
 fmt.Println("X1 = " + mgu["X1"])
 fmt.Println("X2 = " + mgu["X2"])
 fmt.Println("X3 = " + mgu["X3"])
