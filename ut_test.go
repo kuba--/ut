@@ -95,3 +95,25 @@ func ExampleUnify() {
 	// X4 = b
 	// X5 = b
 }
+
+func ExampleLikes() {
+	x := "likes(mary,book(title(Title),author(given('Herman'),SurnameTerm)))"
+	y := "likes(Who,book(title('Moby Dick'),author(given('Herman'),surname('Melville'))))"
+
+	tokens := Tokenize(x, y)
+	ut := New(tokens)
+	ix, iy := ut.Lookup[x], ut.Lookup[y]
+	if !ut.Unify(ix, iy) {
+		fmt.Printf("!! ut.Unify(%d, %d) failed", ix, iy)
+	}
+
+	mgu := Unify(x, y)
+	fmt.Println("Title = " + mgu["Title"])
+	fmt.Println("SurnameTerm = " + mgu["SurnameTerm"])
+	fmt.Println("Who = " + mgu["Who"])
+
+	// Output:
+	// Title = 'Moby Dick'
+	// SurnameTerm = surname('Melville')
+	// Who = mary
+}

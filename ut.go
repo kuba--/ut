@@ -60,7 +60,6 @@ func Unify(x, y string) map[string]string {
 	tokens := Tokenize(x, y)
 	ut := New(tokens)
 	ix, iy := ut.Lookup[x], ut.Lookup[y]
-
 	if !ut.Unify(ix, iy) {
 		return nil
 	}
