@@ -29,10 +29,10 @@ func Unify(x, y string) map[string]string {
 
 x, y := "p(Z,h(Z,W),f(W))", "p(f(X),h(Y,f(a)),Y)"
 mgu := Unify(x, y)
-fmt.Println("W = " + ut.MGU("W"))
-fmt.Println("X = " + ut.MGU("X"))
-fmt.Println("Y = " + ut.MGU("Y"))
-fmt.Println("Z = " + ut.MGU("Z"))
+fmt.Println("W = " + mgu("W"))
+fmt.Println("X = " + mgu("X"))
+fmt.Println("Y = " + mgu("Y"))
+fmt.Println("Z = " + mgu("Z"))
 
 // Output:
 // W = f(a)
@@ -42,7 +42,6 @@ fmt.Println("Z = " + ut.MGU("Z"))
 
 x, y = "f(X1,g(X2,X3),X2,b)", "f(g(h(a,X5),X2),X1,h(a,X4),X4)"
 mgu = Unify(x, y)
-
 fmt.Println("X1 = " + mgu["X1"])
 fmt.Println("X2 = " + mgu["X2"])
 fmt.Println("X3 = " + mgu["X3"])
