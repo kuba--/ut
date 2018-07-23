@@ -52,11 +52,6 @@ func TestUnify(t *testing.T) {
 		t.Fatalf("ut.Unify(%d, %d) failed", ix, iy)
 	}
 
-	for v1, v2 := range ut.Bindings {
-		v2 = ut.Dereference(v2)
-		t.Logf("%s = %s\n", ut.Entries[v1].Term, ut.TermString(v2))
-	}
-
 	mguW := ut.MGU("W")
 	if mguW != "f(a)" {
 		t.Fatalf("Got W => %s Expected: f(a)", mguW)
@@ -78,37 +73,21 @@ func TestUnify(t *testing.T) {
 	}
 }
 
-func ExampleTokenize() {
-	x := "likes(mary,book(title(Title),author(given('Herman'),SurnameTerm)))"
-	y := "likes(Who,book(title('Moby Dick'),author(given('Herman'),surname('Melville'))))"
-
-	tokens := Tokenize(x, y)
-	ut := New(tokens)
-	ix, iy := ut.Lookup[x], ut.Lookup[y]
-	if !ut.Unify(ix, iy) {
-		fmt.Printf("!! ut.Unify(%d, %d) failed", ix, iy)
-	}
-
-	mgu := Unify(x, y)
-	fmt.Println("Title = " + mgu["Title"])
-	fmt.Println("SurnameTerm = " + mgu["SurnameTerm"])
-	fmt.Println("Who = " + mgu["Who"])
-
-	// Output:
-	// Title = 'Moby Dick'
-	// SurnameTerm = surname('Melville')
-	// Who = mary
-}
-
 func ExampleUnify() {
 	x, y := "f(X1,g(X2,X3),X2,b)", "f(g(h(a,X5),X2),X1,h(a,X4),X4)"
 	mgu := Unify(x, y)
-
 	fmt.Println("X1 = " + mgu["X1"])
 	fmt.Println("X2 = " + mgu["X2"])
 	fmt.Println("X3 = " + mgu["X3"])
 	fmt.Println("X4 = " + mgu["X4"])
 	fmt.Println("X5 = " + mgu["X5"])
+
+	x = "likes(mary,book(title(Title),author(given('Herman'),SurnameTerm)))"
+	y = "likes(Who,book(title('Moby Dick'),author(given('Herman'),surname('Melville'))))"
+	mgu = Unify(x, y)
+	fmt.Println("Title = " + mgu["Title"])
+	fmt.Println("SurnameTerm = " + mgu["SurnameTerm"])
+	fmt.Println("Who = " + mgu["Who"])
 
 	// Output:
 	// X1 = g(h(a,b),h(a,b))
@@ -116,4 +95,7 @@ func ExampleUnify() {
 	// X3 = h(a,b)
 	// X4 = b
 	// X5 = b
+	// Title = 'Moby Dick'
+	// SurnameTerm = surname('Melville')
+	// Who = mary
 }

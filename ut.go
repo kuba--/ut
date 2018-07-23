@@ -1,7 +1,6 @@
 package ut
 
 import (
-	"fmt"
 	"log"
 	"strings"
 )
@@ -50,10 +49,6 @@ func (e *Entry) Arity() int {
 	return len(e.Components)
 }
 
-func (e *Entry) String() string {
-	return fmt.Sprintf("{Type: %s, Functor: %s, Components: %v}", TokenString(e.Type), e.Functor, e.Components)
-}
-
 // Unify returns a unification maps with VAR bindings.
 // Also see ut.MGU for particular terms.
 func Unify(x, y string) map[string]string {
@@ -66,8 +61,8 @@ func Unify(x, y string) map[string]string {
 
 	mgu := make(map[string]string)
 	for i, j := range ut.Bindings {
-		j = ut.Dereference(j)
-		mgu[ut.Entries[i].Term] = ut.TermString(j)
+		j = ut.dereference(j)
+		mgu[ut.Entries[i].Term] = ut.termString(j)
 	}
 
 	return mgu
@@ -183,36 +178,36 @@ func (ut *UT) MGU(term string) string {
 		return ""
 	}
 
-	i = ut.Dereference(ut.Bindings[i])
-	return ut.TermString(i)
+	i = ut.dereference(ut.Bindings[i])
+	return ut.termString(i)
 }
 
-// TermString constructs a new term string by dereferencing all components.
-func (ut *UT) TermString(idx int) string {
-	n := len(ut.Entries)
-	if idx < n {
-		e := ut.Entries[idx]
-		if e.Type != Functor {
-			return e.Functor
-		}
-
-		components := []string{}
-		for _, c := range e.Components {
-			i := ut.Dereference(c)
-			if i != idx && ut.Entries[i].Type == Functor {
-				components = append(components, ut.TermString(i))
-			} else {
-				components = append(components, ut.Entries[i].Functor)
-			}
-		}
-
-		return ut.Entries[idx].Functor + "(" + strings.Join(components, ",") + ")"
+// termString constructs a new term string by dereferencing all components.
+func (ut *UT) termString(idx int) string {
+	if idx >= len(ut.Entries) {
+		return ""
 	}
-	return ""
+
+	e := ut.Entries[idx]
+	if e.Type != Functor {
+		return e.Functor
+	}
+
+	components := []string{}
+	for _, c := range e.Components {
+		i := ut.dereference(c)
+		if i != idx && ut.Entries[i].Type == Functor {
+			components = append(components, ut.termString(i))
+		} else {
+			components = append(components, ut.Entries[i].Functor)
+		}
+	}
+
+	return ut.Entries[idx].Functor + "(" + strings.Join(components, ",") + ")"
 }
 
-// Dereference follows bindings and returns index for dereferenced variable.
-func (ut *UT) Dereference(idx int) int {
+// dereference follows bindings and returns index for dereferenced variable.
+func (ut *UT) dereference(idx int) int {
 	i, ok := idx, true
 	for ok {
 		i, ok = ut.Bindings[i]
@@ -236,7 +231,7 @@ func (ut *UT) bindSTR(strIdx, varIdx int) (int, int, bool) {
 	}
 
 	// var is already bound - dereference
-	idx = ut.Dereference(idx)
+	idx = ut.dereference(idx)
 
 	// var is bound to a STR
 	e := ut.Entries[idx]
