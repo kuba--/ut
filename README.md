@@ -9,26 +9,8 @@ The unification algorithm is at the core of the logic programming paradigm, the 
 Here yet another efficient unification algorithm centered on a specific data structure, called the Unification Table.
 
 ```Go
-func Unify(x, y string) map[string]string {
-	tokens := ut.Tokenize(x, y)
-	ut := ut.New(tokens)
-	ix, iy := ut.Lookup[x], ut.Lookup[y]
-
-	if !ut.Unify(ix, iy) {
-		return nil
-	}
-
-	mgu := make(map[string]string)
-	for i, j := range ut.Bindings {
-		j = ut.Dereference(j)
-		mgu[ut.Entries[i].Term] = ut.TermString(j)
-	}
-
-	return mgu
-}
-
 x, y := "p(Z,h(Z,W),f(W))", "p(f(X),h(Y,f(a)),Y)"
-mgu := Unify(x, y)
+mgu := ut.Unify(x, y)
 fmt.Println("W = " + mgu("W"))
 fmt.Println("X = " + mgu("X"))
 fmt.Println("Y = " + mgu("Y"))
@@ -41,7 +23,7 @@ fmt.Println("Z = " + mgu("Z"))
 // Z = f(f(a))
 
 x, y = "f(X1,g(X2,X3),X2,b)", "f(g(h(a,X5),X2),X1,h(a,X4),X4)"
-mgu = Unify(x, y)
+mgu = ut.Unify(x, y)
 fmt.Println("X1 = " + mgu["X1"])
 fmt.Println("X2 = " + mgu["X2"])
 fmt.Println("X3 = " + mgu["X3"])
