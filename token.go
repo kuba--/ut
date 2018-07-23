@@ -22,17 +22,41 @@ import (
 	"unicode/utf8"
 )
 
+// The result of Scan is one of these tokens or a Unicode character.
+const (
+	EOF      = -(iota + 1) // reached end of source
+	Atom                   // a Prolog atom, possibly quoted
+	Comment                // a comment
+	Float                  // a floating point number
+	Functor                // an atom used as a predicate functor
+	FullStop               // "." ending a term
+	Int                    // an integer
+	String                 // a double-quoted string
+	Variable               // a Prolog variable
+	Void                   // the special "_" variable
+)
+
+const bufLen = 1024 // at least utf8.UTFMax
+
+var tokenString = map[rune]string{
+	EOF:      "EOF",
+	Atom:     "Atom",
+	Comment:  "Comment",
+	Float:    "Float",
+	Functor:  "Functor",
+	FullStop: "FullStop",
+	Int:      "Int",
+	String:   "String",
+	Variable: "Variable",
+	Void:     "Void",
+}
+
 // Token encapsulating its type, content and related components.
 type Token struct {
 	Type       rune
 	Term       string
 	Functor    string
 	Components []string
-}
-
-// String returns formatted string for the token.
-func (t *Token) String() string {
-	return fmt.Sprintf("{type: %s, term: %s, functor: %s, components: %v}", TokenString(t.Type), t.Term, t.Functor, t.Components)
 }
 
 // Tokenize scans and classifies prolog terms.
@@ -112,43 +136,6 @@ func (pos position) String() string {
 	}
 	return s
 }
-
-// The result of Scan is one of these tokens or a Unicode character.
-const (
-	EOF      = -(iota + 1) // reached end of source
-	Atom                   // a Prolog atom, possibly quoted
-	Comment                // a comment
-	Float                  // a floating point number
-	Functor                // an atom used as a predicate functor
-	FullStop               // "." ending a term
-	Int                    // an integer
-	String                 // a double-quoted string
-	Variable               // a Prolog variable
-	Void                   // the special "_" variable
-)
-
-var tokenString = map[rune]string{
-	EOF:      "EOF",
-	Atom:     "Atom",
-	Comment:  "Comment",
-	Float:    "Float",
-	Functor:  "Functor",
-	FullStop: "FullStop",
-	Int:      "Int",
-	String:   "String",
-	Variable: "Variable",
-	Void:     "Void",
-}
-
-// TokenString returns a printable string for a token or Unicode character.
-func TokenString(tok rune) string {
-	if s, found := tokenString[tok]; found {
-		return s
-	}
-	return fmt.Sprintf("%q", string(tok))
-}
-
-const bufLen = 1024 // at least utf8.UTFMax
 
 // A Scanner implements reading of Unicode characters and tokens from an io.Reader.
 type scanner struct {
@@ -372,7 +359,7 @@ func (s *scanner) scanAlphanumeric(ch rune) rune {
 }
 
 func (s *scanner) scanGraphic(ch rune) rune {
-	for IsGraphic(ch) {
+	for isGraphic(ch) {
 		ch = s.next()
 	}
 	return ch
@@ -393,7 +380,7 @@ func digitVal(ch rune) int {
 func isDecimal(ch rune) bool { return '0' <= ch && ch <= '9' }
 
 // True if the rune is a graphic token char per ISO §6.4.2
-func IsGraphic(ch rune) bool {
+func isGraphic(ch rune) bool {
 	return isOneOf(ch, `#$&*+-./:<=>?@^\~`)
 }
 
@@ -646,7 +633,7 @@ func (s *scanner) Scan() rune {
 				tok = Functor
 			}
 		}
-	case IsGraphic(ch):
+	case isGraphic(ch):
 		ch = s.next()
 		tok = Atom
 		ch = s.scanGraphic(ch)

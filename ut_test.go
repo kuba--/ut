@@ -82,20 +82,10 @@ func ExampleUnify() {
 	fmt.Println("X4 = " + mgu["X4"])
 	fmt.Println("X5 = " + mgu["X5"])
 
-	x = "likes(mary,book(title(Title),author(given('Herman'),SurnameTerm)))"
-	y = "likes(Who,book(title('Moby Dick'),author(given('Herman'),surname('Melville'))))"
-	mgu = Unify(x, y)
-	fmt.Println("Title = " + mgu["Title"])
-	fmt.Println("SurnameTerm = " + mgu["SurnameTerm"])
-	fmt.Println("Who = " + mgu["Who"])
-
 	// Output:
 	// X1 = g(h(a,b),h(a,b))
 	// X2 = h(a,b)
 	// X3 = h(a,b)
 	// X4 = b
 	// X5 = b
-	// Title = 'Moby Dick'
-	// SurnameTerm = surname('Melville')
-	// Who = mary
 }
