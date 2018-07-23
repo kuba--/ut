@@ -6,4 +6,4 @@ go:
 
 script:
   - go vet
-  - go test -v
+  - go test -race -v
