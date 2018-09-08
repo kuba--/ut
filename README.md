@@ -1,6 +1,7 @@
 [![GoDoc](https://godoc.org/github.com/kuba--/ut?status.svg)](http://godoc.org/github.com/kuba--/ut)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kuba--/ut)](https://goreportcard.com/report/github.com/kuba--/ut)
 [![Build Status](https://travis-ci.org/kuba--/ut.svg?branch=master)](https://travis-ci.org/kuba--/ut)
+[![Version](https://badge.fury.io/gh/kuba--%2Fut.svg)](https://github.com/kuba--/ut/releases)
 
 # ut
 Package ut implements "Yet Another Efficient Unification Algorithm" by Alin Suciu (https://arxiv.org/abs/cs/0603080v1).
