@@ -12,10 +12,10 @@ Here yet another efficient unification algorithm centered on a specific data str
 ```Go
 x, y := "p(Z,h(Z,W),f(W))", "p(f(X),h(Y,f(a)),Y)"
 mgu := ut.Unify(x, y)
-fmt.Println("W = " + mgu("W"))
-fmt.Println("X = " + mgu("X"))
-fmt.Println("Y = " + mgu("Y"))
-fmt.Println("Z = " + mgu("Z"))
+fmt.Println("W = " + mgu["W"])
+fmt.Println("X = " + mgu["X"])
+fmt.Println("Y = " + mgu["Y"])
+fmt.Println("Z = " + mgu["Z"])
 
 // Output:
 // W = f(a)
