@@ -1,6 +1,6 @@
 [![GoDoc](https://godoc.org/github.com/kuba--/ut?status.svg)](http://godoc.org/github.com/kuba--/ut)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kuba--/ut)](https://goreportcard.com/report/github.com/kuba--/ut)
-[![Build Status](https://travis-ci.org/kuba--/ut.svg?branch=master)](https://travis-ci.org/kuba--/ut)
+[![Build Status](https://github.com/kuba--/ut/workflows/build/badge.svg)](https://github.com/kuba--/ut/actions?query=workflow%3Abuild)
 [![Version](https://badge.fury.io/gh/kuba--%2Fut.svg)](https://github.com/kuba--/ut/releases)
 
 # ut
