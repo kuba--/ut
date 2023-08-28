@@ -7,6 +7,14 @@
 Package ut implements "Yet Another Efficient Unification Algorithm" by Alin Suciu (https://arxiv.org/abs/cs/0603080v1).
 
 The unification algorithm is at the core of the logic programming paradigm, the first unification algorithm being developed by Robinson. More efficient algorithms were developed later by Martelli and, Montanari.
+
+Unification unifies terms. A term is one of variable, constant, functor, or literal value. A variable starts with an upper case letter and their names are the keys in the map returned by Unify. Constants start with a lowercase letter. Values are integers, floating point values, or strings. As a simple example:
+```go
+x,y := `f(X,Y)`, `f(1,"hello")`
+```
+This would unify the functor f such that the variable `X` is `1` and the variable `Y` is `"hello"` in the returned map.
+
+
 Here yet another efficient unification algorithm centered on a specific data structure, called the Unification Table.
 
 ```Go
