@@ -1,3 +1,3 @@
 module github.com/kuba--/ut
 
-go 1.13
+go 1.22
